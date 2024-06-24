@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Calculator</title>
+    <style>
+
+        .container{
+            max-width: 300px;
+            border: 1px solid black;
+            border-radius: 8px;
+            color: beige;
+            background-color: rgba(0, 0, 0, .8);
+            margin: 30px auto;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .calcul-interface, .result{
+            display: flex;
+            justify-content: end;
+            align-items: center;
+        }
+
+        .calcul-interface{
+            height: 65px;
+            padding: 5px 10px;
+        }
+
+        .result{
+            height: 25px;
+        }
+
+        .calcul-interface h3, .result h3{
+            font-size: 30px;
+            margin: 0;
+        }
+
+        .delete{
+            display: flex;
+            justify-content: end;
+            margin: 25px 8px 5px 0;
+        }
+
+        .delete i{
+            font-size: 25px;
+            color: gray;
+            transition: all .2s;
+        }
+
+        .delete i:hover{
+            color: white;
+        }
+
+        .interface-button{
+            display: flex;
+        }
+
+        .interface-button span{
+            display: inline-block;
+            padding: 24px 26px;
+            text-align: center;
+            border: 1px solid black;
+            margin: 4px;
+            border-radius: 5px;
+            font-size: 20px;
+            transition: all .4s;
+        }
+
+        .interface-button span:hover{
+            background-color: black;
+            cursor: pointer;
+        }
+
+        .interface-button .operator{
+            display: flex;
+            flex-direction: column;
+        }
+
+        .operator span:hover,
+        .numbers .modulo:hover,
+        .numbers .factoriel:hover{
+            background-color: rgb(179, 174, 174);
+            color: black;
+        }
+
+        .numbers .reset{
+            padding: 24px 24px;
+            color: red;
+        }
+
+        .numbers .bracket {
+            padding: 24px 22px;
+        }
+
+        .numbers .modulo{
+            padding: 24px 23px;
+        }
+
+        .numbers .factoriel{
+            padding: 24px 27px;
+        }
+
+        .numbers .dot{
+            padding: 24px 28px;
+        }
+
+        .numbers span.reset:hover{
+            background-color: red;
+            color: black;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="calcul-interface">
+            <h3></h3>
+        </div>
+
+        <hr>
+
+        <div class="result">
+            <h3></h3>
+        </div>
+
+
+        <div class="delete">
+
+            <i class="fa-solid fa-delete-left" onclick="stepBack()"></i>
+
+        </div>
+
+        <div class="interface-button">
+    
+            <div class="numbers">
+
+                <div>
+
+                    <span class="reset" onclick="resetValues()">D</span>
+                    <span class="bracket">( )</span>
+                    <span class="modulo" onclick="getValueOperator('%')">%</span>
+
+                </div>
+    
+                <div>
+    
+                    <span onclick="getValue('7')">7</span>
+                    <span onclick="getValue('8')">8</span>
+                    <span onclick="getValue('9')">9</span>
+        
+                </div>
+    
+                <div>
+    
+                    <span onclick="getValue('6')">6</span>
+                    <span onclick="getValue('5')">5</span>
+                    <span onclick="getValue('4')">4</span>
+        
+                </div>
+    
+                <div>
+    
+                    <span onclick="getValue('3')">3</span>
+                    <span onclick="getValue('2')">2</span>
+                    <span onclick="getValue('1')">1</span>
+        
+                </div>
+    
+                <div>
+                    
+                    <span class="factoriel" onclick="getValue('!')">!</span>
+                    <span onclick="getValue('0')">0</span>
+                    <span class="dot" onclick="getValue('.')">.</span>
+        
+                </div>
+    
+            </div>
+
+            <div class="operator">
+
+                <span onclick="getValueOperator('+')">+</span>
+                <span onclick="getValueOperator('-')">-</span>
+                <span onclick="getValueOperator('x')">x</span>
+                <span onclick="getValueOperator('/')">/</span>
+                <span onclick="calculResult()">=</span>
+    
+            </div>
+    
+
+        </div>
+    </div>
+
+    <script>
+        
+        
+        let writting = document.querySelector('.calcul-interface h3')
+        let result = document.querySelector('.result h3')
+        let result_interface = ''
+        let interface_value = ''
+        let interface_values = []
+        let finalResult 
+
+
+        function getValue(element){
+            result_interface += element
+            interface_value += element
+            writting.innerHTML = result_interface
+        }
+
+        function getValueOperator(element){
+            interface_values.push(interface_value)
+            interface_values.push(element)
+            interface_value = ''
+            result_interface += element
+            writting.innerHTML = result_interface
+        }
+
+        function resetValues(){
+            result_interface = ''
+            finalResult = ''
+            writting.innerHTML = result_interface
+            result.innerHTML = finalResult
+        }
+
+        function stepBack(){
+            result_interface = result_interface.replace(result_interface.at(-1),'')
+            writting.innerHTML = result_interface
+        }
+
+        function calculResult(){
+
+            const operators = ['/','x','%','+','-']
+            interface_values.push(interface_value)
+            console.log(interface_values)
+            interface_values_copy = interface_values
+            
+
+            for(let i = 0; i < interface_values.length; i++){
+                if(interface_values[i] === 'x' || interface_value[i] === '/'){
+                    if(interface_values[i] === 'x')
+                        finalResult = Number(interface_values[i-1]) * Number(interface_values[i+1])
+                    else 
+                        finalResult = Number(interface_values[i-1]) * Number(interface_values[i+1])
+                }
+                interface_values_copy.splice((i-1),1)
+                interface_values_copy.splice((i+1),1)
+                interface_values_copy[i] = toString(finalResult)
+
+                console.log(interface_values)
+            }
+
+            
+
+        }
+
+        
+        
+        
+    </script>
+    
+</body>
+</html>

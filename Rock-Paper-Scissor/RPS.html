@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissor Game</title>
+    <style>
+
+        .container{
+            max-width: 800px;
+            margin: 30px auto;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-style: italic;
+            font-size: 20px;
+            padding: 10px 35px;
+            box-shadow: 0 0 6px blue;
+            background-color: rgba(0, 0, 0, .9);
+            color: white;
+            transition: all .4s;
+        }
+
+        .container:hover{
+            background-color: bisque;
+            box-shadow: 0 0 9px rgba(0, 0, 0, .7);
+            color: black;
+        }
+
+        .container h2{
+            font-size: 40px;
+            margin-bottom: 30px;
+            margin-top: 0;
+            text-align: center;
+            text-shadow: 2px 2px blue;
+        }
+
+        .container img, .result img{
+            width: 100px;
+            height: 100px;
+            margin: 0 15px;
+            border-radius: 50px;
+            transition: all .4s;
+        }
+
+        .result{
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+
+       .result img{
+            margin-top: 50px;
+            visibility: hidden;
+       }
+
+       
+
+       .result span{
+            width: 100px;
+            height: 100px;
+            margin: 90px 15px 0 15px;
+            font-size: 25px;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+       }
+
+       .score p{
+            margin-top: 0;
+       }
+
+       .score span{
+            margin-left: 155px;
+       }
+        
+
+        .game img:hover{
+            transform: scale(0.88);
+            box-shadow: 0 0 10px rgba(0, 0, 0, .9);
+        }
+
+        p{
+            font-weight: bold;
+        }
+
+        .result p{
+            margin-left: 70px;
+            margin-bottom: 0;
+        }
+
+        .game, .score{
+            text-align: center;
+        }
+
+        
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="game">
+        
+            <h2>Rock Paper Scissor Game</h2>
+            <img src="rock.png" alt="" onclick="toPlay(this)" id="Rock">
+            <img src="paper.png" alt="" onclick="toPlay(this)" id="Paper">
+            <img src="scissor.png" alt="" onclick="toPlay(this)" id="Scissor">
+
+        </div>
+
+        <div class="result">
+
+            <div>
+
+                <img src="" class="choixUser">
+                <p>0</p>
+
+            </div>
+
+            <span></span>
+
+            <div>
+
+                <img src="" class="choixIA">
+                <p>0</p>
+
+            </div>
+            
+
+        </div>
+
+        <div class="score">
+
+            <p>Choix User <span>Choix IA</span></p>
+            
+        </div>
+
+    </div>
+
+    <script>
+
+        var monChoix = document.querySelector(".choixUser")
+        var rock = document.getElementById('Rock')
+        var paper = document.getElementById('Paper')
+        var scissor = document.getElementById('Scissor')
+        var choixIA = document.querySelector(".choixIA")
+        var spoil = document.querySelector('span')
+        var score = document.querySelectorAll('.result p')
+        
+        var scoreIA = 0, scoreUser = 0
+        
+
+        //Fonction declenchant le jeu apres avoir clique sur un choix
+        function toPlay(element){
+
+            // Choix IA entre la pierre, le papier et le ciseau
+            var iaChoice = () => {
+                return Math.floor(Math.random() * 3);
+            }
+
+            // Affichage choix user apres 1,1 seconde
+            const choixUser = () =>{
+                monChoix.src = element.src
+                monChoix.style.visibility = 'visible'
+                
+            }
+            setTimeout(choixUser, 1100)
+
+            //Affichage du resultat de la partie en cours...
+            var gameResult = (game) =>{
+                
+                if(game === 0){
+                    if(monChoix.src == rock.src)
+                        spoil.innerHTML = 'Draw'
+
+                    else if(monChoix.src == paper.src)
+                        spoil.innerHTML = 'Won'
+                    
+                    else if(monChoix.src == scissor.src)
+                        spoil.innerHTML = 'Lost'
+                    
+                }
+
+                else if(game === 1){
+                    if(monChoix.src == rock.src)
+                        spoil.innerHTML = 'Lost'
+
+                    else if(monChoix.src == paper.src)
+                        spoil.innerHTML = 'Draw'
+
+                    else if(monChoix.src == scissor.src)
+                        spoil.innerHTML = 'Won'
+
+                }
+
+                else if(game === 2){
+                    if(monChoix.src == rock.src)
+                        spoil.innerHTML = 'Won'
+
+                    else if(monChoix.src == paper.src)
+                        spoil.innerHTML = 'Lost'
+
+                    else if(element.src == scissor.src)
+                        spoil.innerHTML = 'Draw'
+
+                }
+
+                choixIA.style.visibility = 'visible'
+
+                if(spoil.innerHTML === 'Won'){
+                    scoreUser ++
+                    spoil.style.color = 'Green'
+                    score[0].style.color = 'Green'
+                    score[1].style.color = 'white'
+                }
+                
+                else if(spoil.innerHTML == 'Lost'){
+                    scoreIA ++
+                    spoil.style.color = 'Red'
+                    score[1].style.color = 'Red'
+                    score[0].style.color = 'white'
+                }
+                
+                else if(spoil.innerHTML == 'Draw'){
+                    spoil.style.color = 'blue'
+                }
+                
+                //Affichage Score
+                score[0].innerHTML = scoreUser
+                score[1].innerHTML = scoreIA
+
+            }
+
+            //Affichage choix IA et du resultat de la partie en cours
+            var ia = iaChoice()
+            if(ia === 0){
+                var iaChoosen = () =>{
+                    choixIA.src = rock.src
+                    gameResult(0)
+                }
+            }
+
+            else if(ia === 1){
+                var iaChoosen = () =>{
+                    choixIA.src = paper.src
+                    gameResult(1)
+                }
+            }
+
+            else{
+                var iaChoosen = () =>{
+                    choixIA.src = scissor.src
+                    gameResult(2)
+                }
+            }
+            setTimeout(iaChoosen, 1500)
+      
+        }
+
+        
+
+    </script>
+    
+</body>
+</html>
